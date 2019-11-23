@@ -34,6 +34,7 @@ float luminosity = 0;
 
 int interval = 1; //Intervalo em minutos
 int lastMinute = 0;
+int thresholdUV = 0;
 
 int pulses = 0;
 bool pulseSwitched = 0; //True enquanto o sensor reed está HIGH depois de incrementar o número de pulsos para evitar falsos positivos de rotação. Reseta em LOW.
@@ -56,8 +57,8 @@ void setup() {
     digitalWrite(LED_BUILTIN, HIGH);
   }
 
+  thresholdUV = analogRead(UV);
   rtc.begin();
-
   dht.begin();
 }
 
@@ -98,7 +99,7 @@ void loop() {
     digitalWrite(LED, HIGH);
 
     //Realiza leitura de sensores e tradução de valores
-    UV_index = analogRead(UV) - 13;
+    UV_index = analogRead(UV) - thresholdUV;
     temp = dht.readTemperature();
     humidity = dht.readHumidity();
     luminosity = analogRead(LDR);
